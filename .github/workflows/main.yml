@@ -21,6 +21,7 @@ jobs:
 
       - name: Build Index/TOC
         run: ./CreateIndex-TOC.ps1
+        shell: pwsh
 
       # Publish docfx site
       - name: docfx-action
