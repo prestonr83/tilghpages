@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Get Waiting Tasks </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Get Waiting Tasks ">
+    <meta name="generator" content="docfx 2.56.7.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="get-waiting-tasks">Get Waiting Tasks</h1>
+
+<pre><code class="lang-sql">/*============================================================================
+  File:     WaitingTasks.sql
+ 
+  Summary:  Snapshot of waiting tasks
+ 
+  SQL Server Versions: 2005 onward
+------------------------------------------------------------------------------
+  Written by Paul S. Randal, SQLskills.com
+ 
+  (c) 2019, SQLskills.com. All rights reserved.
+ 
+  For more scripts and sample code, check out 
+    http://www.SQLskills.com
+ 
+  You may alter this code for your own *non-commercial* purposes. You may
+  republish altered code as long as you include this copyright and give due
+  credit, but you must obtain prior permission before blogging this code.
+   
+  THIS CODE AND INFORMATION ARE PROVIDED &quot;AS IS&quot; WITHOUT WARRANTY OF 
+  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED 
+  TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
+  PARTICULAR PURPOSE.
+============================================================================*/
+SELECT
+    [owt].[session_id] AS [SPID],
+    [owt].[exec_context_id] AS [Thread],
+    [ot].[scheduler_id] AS [Scheduler],
+    [owt].[wait_duration_ms] AS [wait_ms],
+    [owt].[wait_type],
+    [owt].[blocking_session_id] AS [Blocking SPID],
+    [owt].[resource_description],
+    CASE [owt].[wait_type]
+        WHEN N'CXPACKET' THEN
+            SUBSTRING ( -- earlier versions don't have anything after the nodeID...
+                [owt].[resource_description],
+                CHARINDEX (N'nodeId=', [owt].[resource_description]) + 7,
+                CHARINDEX (N' tid=', [owt].[resource_description] + ' tid=') -
+                    CHARINDEX (N'nodeId=', [owt].[resource_description]) - 7
+            )
+        ELSE NULL
+    END AS [Node ID],
+    [eqmg].[dop] AS [DOP],
+    [er].[database_id] AS [DBID],
+    CAST ('https://www.sqlskills.com/help/waits/' + [owt].[wait_type] as XML) AS [Help/Info URL],
+    [eqp].[query_plan],
+    [est].text
+FROM sys.dm_os_waiting_tasks [owt]
+INNER JOIN sys.dm_os_tasks [ot] ON
+    [owt].[waiting_task_address] = [ot].[task_address]
+INNER JOIN sys.dm_exec_sessions [es] ON
+    [owt].[session_id] = [es].[session_id]
+INNER JOIN sys.dm_exec_requests [er] ON
+    [es].[session_id] = [er].[session_id]
+FULL JOIN sys.dm_exec_query_memory_grants [eqmg] ON
+    [owt].[session_id] = [eqmg].[session_id]
+OUTER APPLY sys.dm_exec_sql_text ([er].[sql_handle]) [est]
+OUTER APPLY sys.dm_exec_query_plan ([er].[plan_handle]) [eqp]
+WHERE
+    [es].[is_user_process] = 1
+ORDER BY
+    [owt].[session_id],
+    [owt].[exec_context_id];
+GO
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/prestonr83/tilghpages/blob/master/articles/SQL/waiting-tasks.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

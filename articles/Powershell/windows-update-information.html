@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Windows Update Information </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Windows Update Information ">
+    <meta name="generator" content="docfx 2.56.7.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="windows-update-information">Windows Update Information</h1>
+
+<h2 id="list-update-history">List update history</h2>
+<pre><code class="lang-powershell">get-wmiobject -class win32_quickfixengineering
+</code></pre>
+<p>To list last 50 updates including those without hotfix IDs</p>
+<pre><code class="lang-powershell">function Convert-WuaResultCodeToName {
+    param( [Parameter(Mandatory=$true)]
+    [int] $ResultCode
+    )
+    $Result = $ResultCode
+    switch($ResultCode){
+        2{
+            $Result = &quot;Succeeded&quot;
+        }
+        3{
+            $Result = &quot;Succeeded With Errors&quot;
+        }
+        4{
+        $Result = &quot;Failed&quot;
+        }
+    }
+    return $Result
+}
+function Get-WuaHistory{
+    # Get a WUA Session
+    $session = (New-Object -ComObject 'Microsoft.Update.Session')
+    # Query the latest 1000 History starting with the first recordp
+    $history = $session.QueryHistory(&quot;&quot;,0,50) | ForEach-Object {
+        $Result = Convert-WuaResultCodeToName -ResultCode $_.ResultCode
+        # Make the properties hidden in com properties visible.
+        $_ | Add-Member -MemberType NoteProperty -Value $Result -Name Result
+        $Product = $_.Categories | Where-Object {$_.Type -eq 'Product'} | Select-Object -First 1 -ExpandProperty Name
+        $_ | Add-Member -MemberType NoteProperty -Value $_.UpdateIdentity.UpdateId -Name UpdateId
+        $_ | Add-Member -MemberType NoteProperty -Value $_.UpdateIdentity.RevisionNumber -Name RevisionNumber
+        $_ | Add-Member -MemberType NoteProperty -Value $Product -Name Product -PassThru
+        Write-Output $_
+    }
+    # Remove null records and only return the fields we want
+    $history |
+    Where-Object {![String]::IsNullOrWhiteSpace($_.title)} |
+    Select-Object Result, Date, Title, SupportUrl, Product, UpdateId, RevisionNumber
+}
+
+Get-WuaHistory | Format-Table
+</code></pre>
+<h2 id="list-update-settings">List Update settings</h2>
+<pre><code class="lang-powershell">$AutoUpdateNotificationLevels= @{
+    0=&quot;Not configured&quot;; 
+    1=&quot;Disabled&quot;; 
+    2=&quot;Notify before download&quot;;
+    3=&quot;Notify before installation&quot;; 
+    4=&quot;Scheduled installation&quot;
+}
+
+$AutoUpdateDays=@{
+    0=&quot;Every Day&quot;; 
+    1=&quot;Every Sunday&quot;; 
+    2=&quot;Every Monday&quot;; 
+    3=&quot;Every Tuesday&quot;; 
+    4=&quot;Every Wednesday&quot;;
+    5=&quot;Every Thursday&quot;; 
+    6=&quot;Every Friday&quot;; 
+    7=&quot;Every Saturday&quot;
+}
+
+
+Function Get-WindowsUpdateConfig{
+    $AUSettings = (New-Object -com &quot;Microsoft.Update.AutoUpdate&quot;).Settings
+    $AUObj = New-Object -TypeName System.Object
+
+    Add-Member -inputObject $AuObj -MemberType NoteProperty -Name &quot;NotificationLevel&quot;  `
+               -Value $AutoUpdateNotificationLevels[$AUSettings.NotificationLevel]
+
+    Add-Member -inputObject $AuObj -MemberType NoteProperty -Name &quot;UpdateDays&quot; `
+               -Value $AutoUpdateDays[$AUSettings.ScheduledInstallationDay]
+
+    Add-Member -inputObject $AuObj -MemberType NoteProperty -Name &quot;UpdateHour&quot;   `
+               -Value $AUSettings.ScheduledInstallationTime 
+
+    Add-Member -inputObject $AuObj -MemberType NoteProperty -Name &quot;Recommended updates&quot; `
+               -Value $(IF ($AUSettings.IncludeRecommendedUpdates) {&quot;Included&quot;}  else {&quot;Excluded&quot;})
+    $AuObj
+} 
+
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/prestonr83/tilghpages/blob/master/articles/Powershell/windows-update-information.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,671 @@
+{
+  "homepages": [],
+  "source_base_path": "/github/workspace",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Azure/add-cert-to-keyvault.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Azure/add-cert-to-keyvault.html",
+          "hash": "STHXlF/USgvE8BNRHECRew=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Azure/appinsights-stopped-metrics.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Azure/appinsights-stopped-metrics.html",
+          "hash": "sqXvRniwG1F1MPsLFlIwvw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Azure/appservice-vnet-integration.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Azure/appservice-vnet-integration.html",
+          "hash": "QuyYgeVut/Y0JP/loV/Lsg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Azure/arm-nested-resource-copy.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Azure/arm-nested-resource-copy.html",
+          "hash": "G3cWYc93GcquKDHG682SQw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Azure/copy-azure-sql-users.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Azure/copy-azure-sql-users.html",
+          "hash": "awbum06FwguskREZBHrlFw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Azure/create-spn.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Azure/create-spn.html",
+          "hash": "hxOeLn0Ves2gchtbUPHLkQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Azure/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Azure/index.html",
+          "hash": "hBryvSyr8DSER5mmQFoU6Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/Azure/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Azure/toc.html",
+          "hash": "IIy5B7yVJD7utPC+FkXzzg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/DSC/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/DSC/index.html",
+          "hash": "NfRbX83yZGu8qXPTEcCM8g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/DSC/reset-dsc.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/DSC/reset-dsc.html",
+          "hash": "6MC75/JOkabzFygJAyMCDQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/DSC/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/DSC/toc.html",
+          "hash": "kFkDFGsh8qQ4wQ4BJKnuKg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Misc/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Misc/index.html",
+          "hash": "Fr6ldegz4GXBBjxDDMpUWQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Misc/reading.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Misc/reading.html",
+          "hash": "QDvaGbT/b8GZUQjJivAssw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Misc/reset-windows-update.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Misc/reset-windows-update.html",
+          "hash": "Mut+3EqeePiWN1O2kNoPJg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/Misc/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Misc/toc.html",
+          "hash": "dA+URDHWmLU4JL88KVJngg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Misc/tools.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Misc/tools.html",
+          "hash": "PUlmZcaX78SdOGsFZ8FXRA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Powershell/add-powershellget.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Powershell/add-powershellget.html",
+          "hash": "0UVhJQZ0yx1zPKlMpahQvQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Powershell/azure-devops-powershell-repo.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Powershell/azure-devops-powershell-repo.html",
+          "hash": "dCTzMiZLmybvw8VRWPp43w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Powershell/azure-rest-azprofile.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Powershell/azure-rest-azprofile.html",
+          "hash": "Ld0lPLsY95aXUQAnYYnOeQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Powershell/capture-http-statuscode.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Powershell/capture-http-statuscode.html",
+          "hash": "UHGTAUW9QpZeFEpCxbwFuQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Powershell/create-storage-space.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Powershell/create-storage-space.html",
+          "hash": "Hj2W55hRYT8skLbpcYEV9g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Powershell/get-diskinfo.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Powershell/get-diskinfo.html",
+          "hash": "498HYxB+eUHbnK2UrbDsYg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Powershell/get-virtualdisks-in-cluster.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Powershell/get-virtualdisks-in-cluster.html",
+          "hash": "Iqdjp9xlz7sLBbcb49XKoA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Powershell/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Powershell/index.html",
+          "hash": "Z5AuRuVAGfX8EJ0Ojnm5Bw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Powershell/simple-retry-logic.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Powershell/simple-retry-logic.html",
+          "hash": "xtlXneJfcXW5T7q0Z+skHQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Powershell/tls-support.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Powershell/tls-support.html",
+          "hash": "8M72/FkDNc7G2XCJPt/ygQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/Powershell/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Powershell/toc.html",
+          "hash": "0Gleo13969STedyDmZq3qQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Powershell/windows-update-information.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Powershell/windows-update-information.html",
+          "hash": "4Mq0/Gfd1HFUT5BrVkUG8A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/SQL/add-login-mapping-for-linked-server.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SQL/add-login-mapping-for-linked-server.html",
+          "hash": "bcXTnXd3/Vt0vAi4YQIBZw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/SQL/create-external-tables-scripted.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SQL/create-external-tables-scripted.html",
+          "hash": "BuHI1jzWipIGFxr2rMJs4w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/SQL/detailed-link-server-report.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SQL/detailed-link-server-report.html",
+          "hash": "kF2Hcrq6fRDwmaieEpdXeA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/SQL/drop-all-tables-azure-sql.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SQL/drop-all-tables-azure-sql.html",
+          "hash": "CSBVGLJVIpn83s6Fu0SdiQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/SQL/find-linked-dependencies.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SQL/find-linked-dependencies.html",
+          "hash": "Duw9PKiEdILE7vOFO8gtAg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/SQL/find-root-blockers.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SQL/find-root-blockers.html",
+          "hash": "F+RLtumWRE5etEvz8ZkCDA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/SQL/get-backup-or-restore-status.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SQL/get-backup-or-restore-status.html",
+          "hash": "rQwIPGKdfOj48EqjrE/JZA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/SQL/get-databse-sizes.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SQL/get-databse-sizes.html",
+          "hash": "Jzp9RttDvCWUjM0JDtaBtg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/SQL/get-running-queries.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SQL/get-running-queries.html",
+          "hash": "bG+epPjWz94zn+TfxMh5+g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/SQL/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SQL/index.html",
+          "hash": "R7CGvmvfeU3UYmuLseLMdw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/SQL/list-all-db-file-locations.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SQL/list-all-db-file-locations.html",
+          "hash": "w7PZhjJqu9XG5yPAgCARzQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/SQL/list-clr-ref.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SQL/list-clr-ref.html",
+          "hash": "qA0fQPEcfL3DjPq3rkjq8A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/SQL/list-user-roles.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SQL/list-user-roles.html",
+          "hash": "jROq88VYRFFdkevxfLX2pg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
+      "type": "Conceptual",
+      "source_relative_path": "articles/SQL/sql-diagnostic-connection.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SQL/sql-diagnostic-connection.html",
+          "hash": "WkovNYbOYTbl/T3/q7bORw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/SQL/sql-user-administration.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SQL/sql-user-administration.html",
+          "hash": "/1YNalv8JtMRya+CjIaPLA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/SQL/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SQL/toc.html",
+          "hash": "sZgJq0LakD7IbyBUo7ZrCQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/SQL/waiting-tasks.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SQL/waiting-tasks.html",
+          "hash": "gUl87/V9YO+rg2EVEMBLlg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/VSCode/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/VSCode/index.html",
+          "hash": "Y7gGd65i0aP7Z7jseM2HVA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/VSCode/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/VSCode/toc.html",
+          "hash": "BpkUNsnk+QyjT6Af17YUbw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/VSCode/vscode-select-all-matches.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/VSCode/vscode-select-all-matches.html",
+          "hash": "8yVdj7g2wBsPn226irenPQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "3CVIkHnmoB1SjHREXOR1Pw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "logo.svg",
+      "output": {
+        "resource": {
+          "relative_path": "logo.svg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "ulPpEN88sM/pOinuEkzffA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot build incrementally because last build info is missing.",
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0,
+        "full_build_reason_code": "NoAvailableBuildCache"
+      },
+      "processors": {
+        "ConceptualDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 43,
+          "skipped_file_count": 0
+        },
+        "ResourceDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot support incremental post processing, the reason is: last post processor info is null.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}

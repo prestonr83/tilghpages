@@ -1,0 +1,235 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Copy Users in Azure SQL DB </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Copy Users in Azure SQL DB ">
+    <meta name="generator" content="docfx 2.56.7.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="copy-users-in-azure-sql-db">Copy Users in Azure SQL DB</h1>
+
+<p>Copying users between Azure SQL DBs isn't supported by DBA Tools and often when copying databases between environments users need to be copied. This script will copy the users or just generate the scripts. There is also a clean up option to additional users not in the source database.</p>
+<pre><code class="lang-powershell">#Requires -Modules dbatools
+
+$DeleteExtraAccounts = $true # Set to True if you want to remove user accounts on the destination database that are not in the source database
+$generateScripts = $true # Set to True to only generate the scripts needed for changes. This is for issues with 2FA and AAD accounts which is not supported with DBATools.
+$DestinationServer = '' # Connection String for the destination server
+$SourceServer = '' # Connection String for the source server
+
+
+$SourceNonPooledConnection = Connect-DbaInstance -SqlInstance $SourceServer -NonPooledConnection
+$DestinationNonPooledConnection = Connect-DbaInstance -SqlInstance $DestinationServer -NonPooledConnection
+
+$userQuery = @&quot;
+SELECT
+    [UserType] = CASE membprinc.[type]
+                     WHEN 'S' THEN 'SQL User'
+                     WHEN 'U' THEN 'Windows User'
+                     WHEN 'G' THEN 'Windows Group'
+                     WHEN 'X' THEN 'Azure AD'
+					 WHEN 'E' THEN 'Azure AD User'
+                 END,
+    [DatabaseUserName] = membprinc.[name],
+	[AuthType]         = membprinc.[authentication_type_desc],
+    [Role]             = roleprinc.[name]
+FROM
+    --Role/member associations
+    sys.database_role_members          AS members
+    --Roles
+    JOIN      sys.database_principals  AS roleprinc ON roleprinc.[principal_id] = members.[role_principal_id]
+    --Role members (database users)
+    JOIN      sys.database_principals  AS membprinc ON membprinc.[principal_id] = members.[member_principal_id]
+    --Login accounts
+    LEFT JOIN sys.server_principals    AS ulogin    ON ulogin.[sid] = membprinc.[sid]
+WHERE
+    membprinc.[type] IN ('S','U','G','X','E')
+    -- No need for these system accounts
+    AND membprinc.[name] NOT IN ('sys', 'INFORMATION_SCHEMA')
+	AND membprinc.[authentication_type_desc] != 'DATABASE'
+&quot;@
+
+
+$srcUsers = Invoke-DbaQuery -Query $userQuery -SqlInstance $SourceNonPooledConnection -EnableException
+$dstUsers = Invoke-DbaQuery -Query $userQuery -SqlInstance $DestinationNonPooledConnection -EnableException
+$dstRoles = Invoke-DbaQuery -Query &quot;select name from sys.database_principals&quot; -SqlInstance $DestinationNonPooledConnection -EnableException
+$missingRole = $srcUsers.Role | ? {$_ -notin $dstRoles.name}
+if($missingRole){
+    Write-Warning &quot;Missing Roles on [$($DestinationNonPooledConnection.ComputerName)]$($DestinationNonPooledConnection.ConnectionContext.CurrentDatabase). Users in those roles will not have the permissions needed!&quot;
+}
+$extraUsers = $dstUsers.DatabaseUserName | select -Unique | ? {$_ -notin $srcUsers.DatabaseUserName}
+$newUsers = $srcUsers.DatabaseUserName | select -Unique | ? {$_ -notin $dstUsers.DatabaseUserName}
+
+$scripts = ''
+Foreach($user in $newUsers){
+    $props = $srcUsers | ? {$_.DatabaseUserName -eq $user}
+    if($props[0].AuthType -eq 'EXTERNAL'){
+        $newUserQuery = &quot;CREATE USER [$user] FROM  EXTERNAL PROVIDER  WITH DEFAULT_SCHEMA=[dbo];&quot;
+    } else {
+        $newUserQuery = &quot;CREATE USER [$user] FOR LOGIN [$user] WITH DEFAULT_SCHEMA=[dbo];&quot;
+    }
+    Write-host &quot;Creating $user on [$($DestinationNonPooledConnection.ComputerName)]$($DestinationNonPooledConnection.ConnectionContext.CurrentDatabase)&quot;
+    if($generateScripts){
+        $scripts += &quot;$newUserQuery `n&quot;
+    } else {
+        Invoke-DbaQuery -Query $newUserQuery -SqlInstance $DestinationNonPooledConnection
+    }
+    foreach($role in $props.Role){
+        if($role -in $missingRole){
+            Write-Warning &quot;Role $role for user $user is missing on [$($DestinationNonPooledConnection.ComputerName)]$($DestinationNonPooledConnection.ConnectionContext.CurrentDatabase). Skipping role assignment!&quot;
+            continue
+        }
+        $roleQuery = &quot;ALTER ROLE $role ADD MEMBER [$user];&quot;
+        Write-host &quot;Adding $user to role $role on [$($DestinationNonPooledConnection.ComputerName)]$($DestinationNonPooledConnection.ConnectionContext.CurrentDatabase)&quot;
+        if($generateScripts){
+            $scripts += &quot;$roleQuery `n&quot;
+        } else {
+            Invoke-DbaQuery -Query $roleQuery -SqlInstance $DestinationNonPooledConnection
+        }
+    }
+}
+
+If($DeleteExtraAccounts){
+    Foreach($user in $extraUsers){
+        $dropUserQuery = &quot;DROP USER [$user];&quot;
+        Write-host &quot;Dropping $user on [$($DestinationNonPooledConnection.ComputerName)]$($DestinationNonPooledConnection.ConnectionContext.CurrentDatabase)&quot;
+        if($generateScripts){
+            $scripts += &quot;$dropUserQuery `n&quot;
+        } else {
+            Invoke-DbaQuery -Query $dropUserQuery -SqlInstance $DestinationNonPooledConnection
+        }
+    }
+}
+
+if($scripts){
+    Write-host &quot;`n`n`n *****Script Generated*****&quot;
+    $scripts
+}
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/prestonr83/tilghpages/blob/master/articles/Azure/copy-azure-sql-users.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
